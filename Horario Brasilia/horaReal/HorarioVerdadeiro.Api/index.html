@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<title>Horário Verdadeiro</title>
+
+<style>
+
+body {
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+}
+
+.clock {
+    width:300px;
+    height:300px;
+    border:8px solid white;
+    border-radius:50%;
+    position:relative;
+}
+
+.hand {
+    position:absolute;
+    bottom:50%;
+    left:50%;
+    transform-origin:bottom;
+    background:white;
+    border-radius:10px;
+}
+
+.hour {
+    width:8px;
+    height:70px;
+}
+
+.minute {
+    width:5px;
+    height:100px;
+}
+
+.second {
+    width:2px;
+    height:120px;
+    background:red;
+}
+
+.center {
+    position:absolute;
+    width:15px;
+    height:15px;
+    background:white;
+    border-radius:50%;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+
+.digital {
+    margin-top:30px;
+    font-size:40px;
+}
+
+.status {
+    margin-top:10px;
+    color:#aaa;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="clock">
+
+    <div class="hand hour" id="hour"></div>
+
+    <div class="hand minute" id="minute"></div>
+
+    <div class="hand second" id="second"></div>
+
+    <div class="center"></div>
+
+</div>
+
+
+<div class="digital" id="digital">
+--
+</div>
+
+<div class="status" id="status">
+Sincronizando...
+</div>
+
+
+
+<script>
+
+
+let currentTime = null;
+
+
+
+async function sincronizar(){
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5239/api/time"
+        );
+
+
+        const data = await response.json();
+
+
+        currentTime = new Date(data.time);
+
+
+        document.getElementById("status")
+        .innerHTML =
+        `
+        🟢 Sincronizado<br>
+        Offset: ${data.offsetMs ?? 0} ms
+        `;
+
+
+    } catch(error){
+
+        document.getElementById("status")
+        .innerHTML =
+        "🔴 Erro de sincronização";
+
+    }
+
+}
+
+
+
+// Atualiza a cada 5 minutos
+
+setInterval(
+    sincronizar,
+    300000
+);
+
+
+
+function atualizarRelogio(){
+
+
+    if(currentTime){
+
+
+        // avança o relógio localmente
+        currentTime =
+        new Date(
+            currentTime.getTime()+16.6
+        );
+
+
+        let h = currentTime.getHours();
+
+        let m = currentTime.getMinutes();
+
+        let s = currentTime.getSeconds();
+
+        let ms = currentTime.getMilliseconds();
+
+
+
+        let hora =
+        h * 30 +
+        m * 0.5;
+
+
+        let minuto =
+        m * 6 +
+        s * 0.1;
+
+
+        let segundo =
+        s * 6 +
+        ms * 0.006;
+
+
+
+        document.getElementById("hour")
+        .style.transform =
+        `rotate(${hora}deg)`;
+
+
+        document.getElementById("minute")
+        .style.transform =
+        `rotate(${minuto}deg)`;
+
+
+        document.getElementById("second")
+        .style.transform =
+        `rotate(${segundo}deg)`;
+
+
+
+        document.getElementById("digital")
+        .innerHTML =
+
+        `${String(h).padStart(2,"0")}:`+
+        `${String(m).padStart(2,"0")}:`+
+        `${String(s).padStart(2,"0")}.`+
+        `${String(ms).padStart(3,"0")}`;
+
+    }
+
+
+
+    requestAnimationFrame(atualizarRelogio);
+
+}
+
+
+
+// primeira sincronização
+
+sincronizar();
+
+
+// inicia animação
+
+requestAnimationFrame(atualizarRelogio);
+
+
+
+</script>
+
+
+</body>
+
+</html>
