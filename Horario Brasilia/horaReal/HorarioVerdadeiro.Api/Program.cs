@@ -1,5 +1,4 @@
 var builder = WebApplication.CreateBuilder(args);
-
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,7 +15,7 @@ app.UseHttpsRedirection();
 
 var summaries = new[]
 {
-    "Freezing", "Bracing", "Chilly", "Cool",
+    "FreeEzing", "Bracing", "Chilly", "Cool",
     "Mild", "Warm", "Balmy", "Hot",
     "Sweltering", "Scorching"
 };
