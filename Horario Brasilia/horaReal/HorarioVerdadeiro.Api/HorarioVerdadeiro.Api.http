@@ -1,0 +1,6 @@
+@HorarioVerdadeiro.Api_HostAddress = http://localhost:5239
+
+GET {{HorarioVerdadeiro.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

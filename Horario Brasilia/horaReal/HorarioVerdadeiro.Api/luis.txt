@@ -1,0 +1,50 @@
+Resumo da Etapa Atual
+
+Nesta primeira fase do projeto Horário Verdadeiro, preparei o ambiente de desenvolvimento e criei a estrutura inicial da aplicação.
+
+O que foi realizado
+Instalação do .NET SDK
+
+Primeiramente verifiquei se o .NET estava instalado:
+
+dotnet --version
+
+Como o comando não foi encontrado, pesquisei os pacotes disponíveis:
+
+apt search dotnet
+
+Identifiquei que o Ubuntu 26.04 disponibiliza o SDK diretamente pelos repositórios oficiais.
+
+Instalação:
+
+sudo apt install dotnet-sdk-10.0
+Criação da solução
+
+Criei a pasta principal do projeto:
+
+mkdir HorarioVerdadeiro
+cd HorarioVerdadeiro
+
+Em seguida criei uma solução .NET:
+
+dotnet new sln
+Criação da API
+
+Foi criada uma API ASP.NET Core utilizando o template oficial:
+
+dotnet new webapi -n HorarioVerdadeiro.Api
+
+A API foi adicionada à solução:
+
+dotnet sln add HorarioVerdadeiro.Api
+Primeira execução
+
+Acessei a pasta da API:
+
+cd HorarioVerdadeiro.Api
+
+E executei o projeto:
+
+dotnet run
+
+Neste momento a aplicação iniciou o processo de compilação e execução.
